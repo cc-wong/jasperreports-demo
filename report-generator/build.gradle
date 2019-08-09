@@ -19,6 +19,16 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+    jasperreports {
+        transitive = true
+    }
+}
+
+gradle.projectsEvaluated {
+    processResources.dependsOn(compileJasperReports)
+}
+
 dependencies {
 	implementation 'org.apache.camel:camel-spring-boot-starter:2.24.0'
 	compileOnly 'org.projectlombok:lombok'
@@ -26,4 +36,29 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	implementation('javax.xml.bind:jaxb-api:2.3.1')
+
+	jasperreports 'net.sf.jasperreports:jasperreports:6.9.0',
+		'org.codehaus.groovy:groovy-all:2.5.7',
+		'com.lowagie:itext:2.1.7'
 }
+
+/**
+ * Compiles JasperReports templates at jr-templates/template.
+ * Compiled .jasper files will be included with the compiled classes at report/template.
+ */
+task compileJasperReports(dependsOn: 'compileJava') {
+    def jasperSourceDir = file('jr-templates/template')
+    def jasperTargetDir = file('build/classes/java/main/report/template')
+    def classTargetDir = file('build/classes/java/main')
+    doLast {
+	    ant {
+	        taskdef(name: 'jrc', classname: 'net.sf.jasperreports.ant.JRAntCompileTask', classpath: configurations.jasperreports.asPath)
+	        jasperTargetDir.mkdirs()
+	        jrc(srcdir: jasperSourceDir, destdir: jasperTargetDir) {
+	            classpath(path: sourceSets.main.output.classesDirs[0])
+	            include(name: '**/*.jrxml')
+	        }
+	    }
+    }
+}
+classes.dependsOn compileJasperReports

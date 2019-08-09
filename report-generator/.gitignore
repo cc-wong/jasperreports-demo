@@ -6,6 +6,9 @@ bin/
 !**/src/main/**
 !**/src/test/**
 
+jr-templates/bin/
+*.jasper
+
 ### STS ###
 .apt_generated
 .classpath
