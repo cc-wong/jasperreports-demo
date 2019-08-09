@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DemoReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="22df6f82-a127-49e0-b79f-5446ccc6c70e">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Demo Data Adapter"/>
+	<subDataset name="Dataset1" uuid="a7d1449f-edd0-4670-894d-6a173134a70e">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Demo Data Adapter"/>
+		<queryString language="xPath">
+			<![CDATA[/report/record]]>
+		</queryString>
+		<field name="code" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="code"/>
+			<fieldDescription><![CDATA[code]]></fieldDescription>
+		</field>
+		<field name="description" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="description"/>
+			<fieldDescription><![CDATA[description]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString language="xPath">
+		<![CDATA[/report/record]]>
+	</queryString>
+	<field name="code" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="code"/>
+		<fieldDescription><![CDATA[code]]></fieldDescription>
+	</field>
+	<field name="description" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="description"/>
+		<fieldDescription><![CDATA[description]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="30" uuid="37cdda84-ddcd-4e6f-82f8-af74a1d8c31f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Comic Sans MS" size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Demo Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="55" splitType="Stretch">
+			<staticText>
+				<reportElement x="50" y="10" width="100" height="30" uuid="5043f1c4-fc0c-4e05-8819-5b0101d2aef2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e00c70ff-9b99-46fd-8fcd-7ce18ca9d178"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Item Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="10" width="254" height="30" uuid="1236142b-3314-4fb6-b09f-a1e06920f0ae">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b691948a-d7b9-4239-90e8-8c06aba3ea80"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Item Description]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<textField>
+				<reportElement x="50" y="10" width="100" height="30" uuid="f1b035c9-00bf-4349-89fe-3cc7c7d71cfb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e00c70ff-9b99-46fd-8fcd-7ce18ca9d178"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="10" width="254" height="30" uuid="ec3400a8-1e2c-4b93-a28d-0d37498ea7b1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b691948a-d7b9-4239-90e8-8c06aba3ea80"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
