@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
+import net.sf.jasperreports.engine.export.HtmlExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
@@ -33,6 +34,8 @@ import net.sf.jasperreports.export.AbstractXlsReportConfiguration;
 import net.sf.jasperreports.export.ExporterInput;
 import net.sf.jasperreports.export.OutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
+import net.sf.jasperreports.export.SimpleHtmlReportConfiguration;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import net.sf.jasperreports.export.SimplePdfReportConfiguration;
@@ -41,11 +44,12 @@ import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 
 /**
  * The engine for report generation.
+ * 
+ * @see <a href="https://www.baeldung.com/spring-jasper">
+ *      https://www.baeldung.com/spring-jasper</a>
  */
 @Component
 @ConfigurationProperties(prefix = "report.engine")
-
-/** The Constant log. */
 @Slf4j
 public class ReportEngine {
 
@@ -56,22 +60,10 @@ public class ReportEngine {
 	private static final String FILE_EXTENSION_SEPARATOR = ".";
 
 	/** The template directory path. */
-
-	/**
-	 * Sets the template path.
-	 *
-	 * @param templatePath the new template path
-	 */
 	@Setter
 	private String templatePath;
 
 	/** The output directory path. */
-
-	/**
-	 * Sets the output directory path.
-	 *
-	 * @param outputDirectoryPath the new output directory path
-	 */
 	@Setter
 	private String outputDirectoryPath;
 
@@ -99,6 +91,9 @@ public class ReportEngine {
 		case PDF:
 			exportToPdf(generationProperties, exporterInput, outputFile);
 			break;
+		case HTML:
+			exportToHtml(generationProperties, exporterInput, outputFile);
+			break;
 		default:
 			throw new IllegalArgumentException(String.format("Export type [%s] not yet supported!", exportType));
 		}
@@ -121,8 +116,7 @@ public class ReportEngine {
 		JRDataSource dataSource = new JRXmlDataSource(data, generationProperties.getDataSelectExpression());
 		Map<String, Object> parameters = new HashMap<>();
 		JasperPrint jasperPrint = JasperFillManager.fillReport(template, parameters, dataSource);
-		SimpleExporterInput exporterInput = new SimpleExporterInput(jasperPrint);
-		return exporterInput;
+		return new SimpleExporterInput(jasperPrint);
 	}
 
 	/**
@@ -166,16 +160,6 @@ public class ReportEngine {
 	}
 
 	/**
-	 * Initializes the report exporter output.
-	 *
-	 * @param file the output file
-	 * @return the output stream exporter output
-	 */
-	private SimpleOutputStreamExporterOutput initExporterOutput(File file) {
-		return new SimpleOutputStreamExporterOutput(file);
-	}
-
-	/**
 	 * Exports the report to a PDF file.
 	 *
 	 * @param generationProperties the report generation properties
@@ -211,7 +195,7 @@ public class ReportEngine {
 	}
 
 	/**
-	 * Exports the report to a MS Excel 2003 file.
+	 * Exports the report to an MS Excel 2003 file.
 	 *
 	 * @param generationProperties the report generation properties
 	 * @param exporterInput        the exporter input
@@ -238,7 +222,7 @@ public class ReportEngine {
 	}
 
 	/**
-	 * Exports the report to a MS Excel 97 file.
+	 * Exports the report to an MS Excel 97 file.
 	 *
 	 * @param generationProperties the report generation properties
 	 * @param exporterInput        the exporter input
@@ -287,6 +271,42 @@ public class ReportEngine {
 		} catch (IllegalArgumentException | SecurityException e) {
 			throw e;
 		}
+	}
+
+	/**
+	 * Exports the report to an HTML file.
+	 *
+	 * @param generationProperties the report generation properties
+	 * @param exporterInput        the exporter input
+	 * @param outputFile           the data object representing the output file;
+	 *                             expects an HTML file
+	 * @throws JRException the JR exception
+	 */
+	private void exportToHtml(ReportGenerationProperties generationProperties, ExporterInput exporterInput,
+			File outputFile) throws JRException {
+		SimpleHtmlExporterOutput exporterOutput = new SimpleHtmlExporterOutput(outputFile);
+		try {
+			SimpleHtmlReportConfiguration reportConfig = new SimpleHtmlReportConfiguration();
+
+			HtmlExporter exporter = new HtmlExporter();
+			exporter.setConfiguration(reportConfig);
+
+			exporter.setExporterInput(exporterInput);
+			exporter.setExporterOutput(exporterOutput);
+			exporter.exportReport();
+		} finally {
+			exporterOutput.close();
+		}
+	}
+
+	/**
+	 * Initializes the report exporter output.
+	 *
+	 * @param file the output file
+	 * @return the output stream exporter output
+	 */
+	private SimpleOutputStreamExporterOutput initExporterOutput(File file) {
+		return new SimpleOutputStreamExporterOutput(file);
 	}
 
 }
