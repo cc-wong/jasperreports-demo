@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report>
+<report heading="Demo Report" runDateTime="2019-08-10 23:14:48">
 	<record>
 		<code>AA</code>
 		<description>Item 1</description>
