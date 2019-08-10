@@ -1,7 +1,7 @@
 report:
   data: |+
       <?xml version="1.0" encoding="UTF-8"?>
-      <report>
+      <report heading="Demo Report">
       	<record>
       		<code>AA</code>
       		<description>Item 1</description>

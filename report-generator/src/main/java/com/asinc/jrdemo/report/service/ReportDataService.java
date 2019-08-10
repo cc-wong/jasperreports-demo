@@ -13,9 +13,12 @@ import javax.xml.transform.stream.StreamResult;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.io.DOMWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
+
+import com.asinc.jrdemo.util.DateAndTimeHelper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,16 +33,26 @@ public class ReportDataService {
 	@Value("${report.data}")
 	private String reportData;
 
+	/** The date and time helper. */
+	@Autowired
+	private DateAndTimeHelper dateAndTimeHelper;
+
 	/**
-	 * Gets the report data from the application properties file(s).
+	 * Gets the report data from the application properties file(s). An root element
+	 * attribute "runDateTime" will be added with the current system date and time
+	 * as its value.
 	 *
-	 * @return the report data
+	 * @return the report data as an XML object
 	 * @throws DocumentException    the document exception
 	 * @throws TransformerException the transformer exception
 	 * @throws IOException          Signals that an I/O exception has occurred.
 	 */
 	public Document getReportData() throws DocumentException, TransformerException, IOException {
-		Document document = convertToStandardApi(DocumentHelper.parseText(reportData));
+		org.dom4j.Document dom4jDocument = DocumentHelper.parseText(this.reportData);
+		dom4jDocument.getRootElement().addAttribute("runDateTime",
+				this.dateAndTimeHelper.formatCurrentSystemDateTime("yyyy-MM-dd HH:mm:ss"));
+
+		Document document = convertToStandardApi(dom4jDocument);
 		log.debug("XML report data:\n" + prettyPrintXml(document));
 		return document;
 	}

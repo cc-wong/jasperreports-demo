@@ -4,18 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.Map;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 
 import com.asinc.jrdemo.report.ReportExportType;
 import com.asinc.jrdemo.report.ReportGenerationProperties;
+import com.asinc.jrdemo.util.DateAndTimeHelper;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +64,10 @@ public class ReportEngine {
 	@Setter
 	private String outputDirectoryPath;
 
+	/** The date and time helper. */
+	@Autowired
+	private DateAndTimeHelper dateAndTimeHelper;
+
 	/**
 	 * Runs a report.
 	 *
@@ -79,6 +80,7 @@ public class ReportEngine {
 	 */
 	public File runReport(Document data, ReportGenerationProperties generationProperties, ReportExportType exportType)
 			throws JRException, IOException {
+		log.info(String.format("Running report with export type [%s]", exportType));
 		ExporterInput exporterInput = populateData(data, generationProperties);
 		File outputFile = initOutputFile(generationProperties, exportType);
 		switch (exportType) {
@@ -114,8 +116,7 @@ public class ReportEngine {
 			throws JRException, IOException {
 		JasperReport template = getTemplate(generationProperties);
 		JRDataSource dataSource = new JRXmlDataSource(data, generationProperties.getDataSelectExpression());
-		Map<String, Object> parameters = new HashMap<>();
-		JasperPrint jasperPrint = JasperFillManager.fillReport(template, parameters, dataSource);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(template, new HashMap<>(), dataSource);
 		return new SimpleExporterInput(jasperPrint);
 	}
 
@@ -144,19 +145,9 @@ public class ReportEngine {
 	 */
 	private File initOutputFile(ReportGenerationProperties generationProperties, ReportExportType exportType) {
 		return new File(this.outputDirectoryPath + FILE_PATH_SEPARATOR
-				+ String.format("%s_%s", generationProperties.getOutputFileName(), getTimestampForFileName())
+				+ String.format("%s_%s", generationProperties.getOutputFileName(),
+						this.dateAndTimeHelper.formatCurrentSystemDateTime("yyyyMMdd-HHmmss"))
 				+ FILE_EXTENSION_SEPARATOR + exportType.getFileExtension());
-	}
-
-	/**
-	 * Gets the timestamp to use as the suffix of the output file name.
-	 *
-	 * @return the timestamp string in {@code yyyyMMdd-HHmmss}
-	 */
-	private String getTimestampForFileName() {
-		Clock clock = Clock.systemDefaultZone();
-		LocalDateTime localDateTime = LocalDateTime.ofInstant(clock.instant(), clock.getZone());
-		return DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss").format(localDateTime);
 	}
 
 	/**

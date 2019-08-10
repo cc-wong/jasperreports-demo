@@ -1,10 +1,12 @@
 package com.asinc.jrdemo;
 
 import java.io.File;
+import java.time.Clock;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 
@@ -15,8 +17,7 @@ import com.asinc.jrdemo.report.service.ReportGenerationService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * The application runner that allows the application to be started from the
- * command line.
+ * The application runner.
  */
 @Component
 @Slf4j
@@ -31,7 +32,17 @@ public class ApplicationRunner implements CommandLineRunner {
 	private ReportGenerationService reportGenerationService;
 
 	/**
-	 * Runs the application.
+	 * The system clock.
+	 *
+	 * @return the system clock
+	 */
+	@Bean
+	public Clock systemClock() {
+		return Clock.systemDefaultZone();
+	}
+
+	/**
+	 * Runs the application from the command line.
 	 *
 	 * @param args the arguments
 	 * @throws Exception the exception
