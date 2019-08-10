@@ -1,6 +1,7 @@
 package com.asinc.jrdemo;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -37,14 +38,30 @@ public class ApplicationRunner implements CommandLineRunner {
 	 */
 	@Override
 	public void run(String... args) throws Exception {
-		ReportExportType exportType = ReportExportType.PDF;
-
 		try {
 			Document reportData = this.reportDataService.getReportData();
-			File output = this.reportGenerationService.runReport(reportData, exportType);
+			File output = this.reportGenerationService.runReport(reportData, getExportType(args));
 			log.info("Report generated to: " + output);
 		} catch (Exception e) {
 			log.error("Exception thrown.", e);
+		}
+	}
+
+	/**
+	 * Gets the export type from the command line argument(s).
+	 *
+	 * @param args the arguments
+	 * @return the export type defined by the argument; if an invalid type or none
+	 *         is provided, the default - PDF - will be returned
+	 */
+	private ReportExportType getExportType(String... args) {
+		String exportTypeArg = Arrays.stream(args).findFirst().orElse("");
+		log.debug("Export type from argument: " + exportTypeArg);
+		try {
+			return ReportExportType.valueOf(exportTypeArg);
+		} catch (IllegalArgumentException e) {
+			log.debug("Invalid type or none provided; use default.");
+			return ReportExportType.PDF;
 		}
 	}
 
