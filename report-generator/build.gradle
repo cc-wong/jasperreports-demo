@@ -17,6 +17,11 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {
+		// For dependency com.lowagie:itext:jar:2.1.7.js6, which is no longer at mavenCentral().
+		// Ref: https://community.jaspersoft.com/questions/1071031/itext-js6-dependency-issue
+		url 'http://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/'
+	}
 }
 
 configurations {
@@ -35,11 +40,28 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// JAXB (package javax.xml.bind) no longer exists in JDK as of Java 11.
 	implementation('javax.xml.bind:jaxb-api:2.3.1')
 
-	jasperreports 'net.sf.jasperreports:jasperreports:6.9.0',
-		'org.codehaus.groovy:groovy-all:2.5.7',
-		'com.lowagie:itext:2.1.7'
+	// iText 5+ is used only during runtime, and so isn't needed for compile.
+	// Refs:
+	// https://www.reddit.com/r/java/comments/2x58or/how_to_add_jasperreports_library_to_gradle_project/
+	// https://community.jaspersoft.com/questions/847229/jasperreports-6-itext-5-affero-licensing-catch
+	compile("net.sf.jasperreports:jasperreports:6.9.0") {
+		exclude group: 'com.itextpdf'
+	}
+	runtime("com.itextpdf:itextpdf:5.5.13.1")
+	runtime("com.itextpdf:itext-pdfa:5.5.13.1")
+
+	implementation("org.dom4j:dom4j:2.1.1")
+	runtime("xalan:xalan:2.7.2") {
+		// Exclude package javax.xml since it already exists in the JDK.
+		// Java 11 does not allow the same package in multiple dependencies.
+		exclude group: 'xml-apis'
+	}
+
+	jasperreports "net.sf.jasperreports:jasperreports:6.9.0",
+		'org.codehaus.groovy:groovy-all:2.5.7'
 }
 
 /**
@@ -48,7 +70,7 @@ dependencies {
  */
 task compileJasperReports(dependsOn: 'compileJava') {
     def jasperSourceDir = file('jr-templates/template')
-    def jasperTargetDir = file('build/classes/java/main/report/template')
+    def jasperTargetDir = file('build/resources/main/report/template')
     def classTargetDir = file('build/classes/java/main')
     doLast {
 	    ant {

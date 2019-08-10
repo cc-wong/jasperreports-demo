@@ -1,1 +1,35 @@
-
+report:
+  data: |+
+      <?xml version="1.0" encoding="UTF-8"?>
+      <report>
+      	<record>
+      		<code>AA</code>
+      		<description>Item 1</description>
+      	</record>
+      	<record>
+      		<code>BB</code>
+      		<description>Item 2</description>
+      	</record>
+      	<record>
+      		<code>CC</code>
+      		<description>Item 3</description>
+      	</record>
+      	<record>
+      		<code>DD</code>
+      		<description>Item 4</description>
+      	</record>
+      	<record>
+      		<code>EE</code>
+      		<description>Item 5</description>
+      	</record>
+      </report>
+  engine:
+    template-path: /report/template
+    output-directory-path: C:/data/workspace/outputs/jasperreports_tests
+  generation:
+    properties:
+      template-file-name: DemoReport.jasper
+      data-select-expression: /report/record
+      output-file-name: DemoReport
+      output-file-title: Demo Report
+      output-file-creator: Cecilia Wong
