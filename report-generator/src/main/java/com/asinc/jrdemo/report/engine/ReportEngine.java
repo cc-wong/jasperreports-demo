@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.export.AbstractXlsReportConfiguration;
@@ -35,6 +36,7 @@ import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import net.sf.jasperreports.export.SimplePdfReportConfiguration;
+import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
 import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 
 /**
@@ -90,6 +92,9 @@ public class ReportEngine {
 		switch (exportType) {
 		case MS_EXCEL_2003:
 			exportToXlsx(generationProperties, exporterInput, outputFile);
+			break;
+		case MS_EXCEL_97:
+			exportToXls(generationProperties, exporterInput, outputFile);
 			break;
 		case PDF:
 			exportToPdf(generationProperties, exporterInput, outputFile);
@@ -220,9 +225,34 @@ public class ReportEngine {
 		try {
 			SimpleXlsxReportConfiguration reportConfig = initXlsReportConfiguration(
 					SimpleXlsxReportConfiguration.class);
-			reportConfig.setSheetNames(new String[] { "DATA" });
 
 			JRXlsxExporter exporter = new JRXlsxExporter();
+			exporter.setConfiguration(reportConfig);
+
+			exporter.setExporterInput(exporterInput);
+			exporter.setExporterOutput(exporterOutput);
+			exporter.exportReport();
+		} finally {
+			exporterOutput.close();
+		}
+	}
+
+	/**
+	 * Exports the report to a MS Excel 97 file.
+	 *
+	 * @param generationProperties the report generation properties
+	 * @param exporterInput        the exporter input
+	 * @param outputFile           the data object representing the output file;
+	 *                             expects an XLS file
+	 * @throws JRException the JR exception
+	 */
+	private void exportToXls(ReportGenerationProperties generationProperties, ExporterInput exporterInput,
+			File outputFile) throws JRException {
+		OutputStreamExporterOutput exporterOutput = initExporterOutput(outputFile);
+		try {
+			SimpleXlsReportConfiguration reportConfig = initXlsReportConfiguration(SimpleXlsReportConfiguration.class);
+
+			JRXlsExporter exporter = new JRXlsExporter();
 			exporter.setConfiguration(reportConfig);
 
 			exporter.setExporterInput(exporterInput);

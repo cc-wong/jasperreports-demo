@@ -60,6 +60,10 @@ dependencies {
 		exclude group: 'xml-apis'
 	}
 
+	// Required to generate outputs in MS Excel 97 format.
+	// https://community.jaspersoft.com/questions/542132/xls-file-output-error
+	runtime("org.apache.poi:poi:4.1.0")
+
 	jasperreports "net.sf.jasperreports:jasperreports:6.9.0",
 		'org.codehaus.groovy:groovy-all:2.5.7'
 }
