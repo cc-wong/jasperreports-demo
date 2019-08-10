@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+	<property name="LOG_ROOT" value="log" />
+	<property name="LOG_FILE_NAME" value="app" />
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_ROOT}/${LOG_FILE_NAME}.log</file>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%d{HH:mm:ss.SSS} [%t] %-5level %logger - %msg%n
+			</Pattern>
+		</encoder>
+
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${DEV_HOME}/archived/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>50MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+</included>

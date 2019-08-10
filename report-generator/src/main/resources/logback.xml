@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="logback/consoleAppender.xml" />
+	<include resource="logback/fileAppender.xml" />
+
+	<logger name="com.asinc.jrdemo.report.service.ReportDataService" level="debug" additivity="false">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</logger>
+	<logger name="com.asinc.jrdemo" level="info" additivity="false">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<root level="warn">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>

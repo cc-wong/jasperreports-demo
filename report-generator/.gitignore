@@ -5,6 +5,7 @@ bin/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+log/
 
 jr-templates/bin/
 *.jasper
@@ -13,7 +14,6 @@ jr-templates/bin/
 .apt_generated
 .classpath
 .factorypath
-.project
 .settings
 .springBeans
 .sts4-cache
