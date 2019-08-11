@@ -10,7 +10,6 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 ext {
-	camelVersion = "2.24.0"
 	jasperReportsVersion = "6.9.0"
 	itextVersion = "5.5.13.1"
 	groovyVersion = "3.0.0-beta-3"
@@ -42,7 +41,7 @@ gradle.projectsEvaluated {
 }
 
 dependencies {
-	implementation "org.apache.camel:camel-spring-boot-starter:${camelVersion}"
+	implementation "org.springframework.boot:spring-boot-starter"
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
