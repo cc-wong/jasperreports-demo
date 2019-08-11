@@ -16,83 +16,55 @@
 			<fieldDescription><![CDATA[@runDateTime]]></fieldDescription>
 		</field>
 	</subDataset>
+	<parameter name="SubReportPath" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SubReport.jasper"]]></defaultValueExpression>
+	</parameter>
 	<queryString language="xPath">
-		<![CDATA[/report/record]]>
+		<![CDATA[/report]]>
 	</queryString>
-	<field name="code" class="java.lang.String">
-		<property name="net.sf.jasperreports.xpath.field.expression" value="code"/>
-		<fieldDescription><![CDATA[code]]></fieldDescription>
+	<field name="heading" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="@heading"/>
+		<fieldDescription><![CDATA[@heading]]></fieldDescription>
 	</field>
-	<field name="description" class="java.lang.String">
-		<property name="net.sf.jasperreports.xpath.field.expression" value="description"/>
-		<fieldDescription><![CDATA[description]]></fieldDescription>
+	<field name="runDateTime" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="@runDateTime"/>
+		<fieldDescription><![CDATA[@runDateTime]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="30" splitType="Stretch">
-			<staticText>
-				<reportElement x="-20" y="0" width="595" height="30" uuid="37cdda84-ddcd-4e6f-82f8-af74a1d8c31f"/>
+			<textField>
+				<reportElement x="-20" y="0" width="595" height="30" uuid="6d4e0fde-f3d7-40ce-8e06-97d4e9a73e02"/>
 				<textElement textAlignment="Center">
 					<font fontName="Comic Sans MS" size="19" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Demo Report]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$F{heading}+" ("+$F{runDateTime}+")"]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="14" splitType="Stretch"/>
+		<band height="6" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="23" splitType="Stretch">
-			<staticText>
-				<reportElement x="-20" y="0" width="300" height="20" uuid="5043f1c4-fc0c-4e05-8819-5b0101d2aef2">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e00c70ff-9b99-46fd-8fcd-7ce18ca9d178"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font isBold="true" isUnderline="false"/>
-				</textElement>
-				<text><![CDATA[Item Code]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="280" y="0" width="295" height="20" uuid="1236142b-3314-4fb6-b09f-a1e06920f0ae">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b691948a-d7b9-4239-90e8-8c06aba3ea80"/>
-				</reportElement>
-				<textElement>
-					<font isBold="true" isUnderline="false"/>
-				</textElement>
-				<text><![CDATA[Item Description]]></text>
-			</staticText>
-			<line>
-				<reportElement x="0" y="21" width="548" height="1" uuid="5f789b29-534b-4f53-a434-8c992bf13be6"/>
-			</line>
-		</band>
+		<band height="4" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="23" splitType="Stretch">
-			<textField>
-				<reportElement x="-20" y="3" width="300" height="20" uuid="f1b035c9-00bf-4349-89fe-3cc7c7d71cfb">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e00c70ff-9b99-46fd-8fcd-7ce18ca9d178"/>
+		<band height="30" splitType="Stretch">
+			<subreport>
+				<reportElement x="-20" y="0" width="595" height="30" uuid="e41c5b44-092d-41a8-8278-fd99039f7811">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="280" y="3" width="295" height="20" uuid="ec3400a8-1e2c-4b93-a28d-0d37498ea7b1">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b691948a-d7b9-4239-90e8-8c06aba3ea80"/>
-				</reportElement>
-				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
-			</textField>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRXmlDataSource($P{XML_DATA_DOCUMENT}, "/report/record")]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SubReportPath}]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 	<columnFooter>
 		<band height="4" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
-			<line>
-				<reportElement x="0" y="3" width="548" height="1" uuid="158506cb-85da-46f5-9c63-b2fd5d8db71a"/>
-			</line>
 		</band>
 	</columnFooter>
 	<pageFooter>

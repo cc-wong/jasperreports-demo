@@ -13,6 +13,7 @@ ext {
 	camelVersion = "2.24.0"
 	jasperReportsVersion = "6.9.0"
 	itextVersion = "5.5.13.1"
+	groovyVersion = "3.0.0-beta-3"
 }
 
 configurations {
@@ -58,6 +59,7 @@ dependencies {
 	}
 	runtime("com.itextpdf:itextpdf:${itextVersion}")
 	runtime("com.itextpdf:itext-pdfa:${itextVersion}")
+	runtime("org.codehaus.groovy:groovy:${groovyVersion}")
 
 	implementation("org.dom4j:dom4j:2.1.1")
 	runtime("xalan:xalan:2.7.2") {
@@ -70,8 +72,9 @@ dependencies {
 	// https://community.jaspersoft.com/questions/542132/xls-file-output-error
 	runtime("org.apache.poi:poi:4.1.0")
 
+	// Imports for task compileJasperReports.
 	jasperreports "net.sf.jasperreports:jasperreports:${jasperReportsVersion}",
-		"org.codehaus.groovy:groovy-all:2.5.7"
+		"org.codehaus.groovy:groovy-all:${groovyVersion}"
 }
 
 /**
@@ -80,8 +83,8 @@ dependencies {
  */
 task compileJasperReports(dependsOn: 'compileJava') {
     def jasperSourceDir = file('jr-templates/template')
-    def jasperTargetDir = file('build/resources/main/report/template')
-    def classTargetDir = file('build/classes/java/main')
+    def jasperTargetDir = file("${sourceSets.main.output.resourcesDir}/report/template")
+    println sourceSets.main.output.resourcesDir
     doLast {
 	    ant {
 	        taskdef(name: 'jrc', classname: 'net.sf.jasperreports.ant.JRAntCompileTask', classpath: configurations.jasperreports.asPath)

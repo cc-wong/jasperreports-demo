@@ -24,12 +24,14 @@ report:
       	</record>
       </report>
   engine:
-    template-path: /report/template
+    template-path: report/template
     output-directory-path: C:/data/workspace/outputs/jasperreports_tests
   generation:
     properties:
       template-file-name: DemoReport.jasper
-      data-select-expression: /report/record
+      subreports:
+        SubReportPath: SubReport.jasper
+      data-select-expression: /report
       output-file-name: DemoReport
       output-file-title: Demo Report
       output-file-creator: Cecilia Wong

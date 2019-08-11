@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="22df6f82-a127-49e0-b79f-5446ccc6c70e">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Demo Data Adapter"/>
+	<subDataset name="Dataset1" uuid="dba21e02-322e-458c-905f-d61a6d640c6f">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Demo Data Adapter"/>
+		<queryString language="xPath">
+			<![CDATA[/report]]>
+		</queryString>
+		<field name="heading" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="@heading"/>
+			<fieldDescription><![CDATA[@heading]]></fieldDescription>
+		</field>
+		<field name="runDateTime" class="java.sql.Timestamp">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="@runDateTime"/>
+			<fieldDescription><![CDATA[@runDateTime]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString language="xPath">
+		<![CDATA[/report/record]]>
+	</queryString>
+	<field name="code" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="code"/>
+		<fieldDescription><![CDATA[code]]></fieldDescription>
+	</field>
+	<field name="description" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="description"/>
+		<fieldDescription><![CDATA[description]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="4" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="6" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="-20" y="0" width="300" height="20" uuid="5043f1c4-fc0c-4e05-8819-5b0101d2aef2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e00c70ff-9b99-46fd-8fcd-7ce18ca9d178"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Item Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="295" height="20" uuid="1236142b-3314-4fb6-b09f-a1e06920f0ae">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b691948a-d7b9-4239-90e8-8c06aba3ea80"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Item Description]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="21" width="548" height="1" uuid="5f789b29-534b-4f53-a434-8c992bf13be6"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="-20" y="3" width="300" height="20" uuid="f1b035c9-00bf-4349-89fe-3cc7c7d71cfb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e00c70ff-9b99-46fd-8fcd-7ce18ca9d178"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="3" width="295" height="20" uuid="ec3400a8-1e2c-4b93-a28d-0d37498ea7b1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b691948a-d7b9-4239-90e8-8c06aba3ea80"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="4" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<line>
+				<reportElement x="0" y="3" width="548" height="1" uuid="158506cb-85da-46f5-9c63-b2fd5d8db71a"/>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="5" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="5" splitType="Stretch"/>
+	</summary>
+</jasperReport>

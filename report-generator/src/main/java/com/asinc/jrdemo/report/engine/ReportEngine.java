@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -115,8 +117,14 @@ public class ReportEngine {
 	private ExporterInput populateData(Document data, ReportGenerationProperties generationProperties)
 			throws JRException, IOException {
 		JasperReport template = getTemplate(generationProperties);
+
 		JRDataSource dataSource = new JRXmlDataSource(data, generationProperties.getDataSelectExpression());
-		JasperPrint jasperPrint = JasperFillManager.fillReport(template, new HashMap<>(), dataSource);
+		Map<String, Object> parameters = new HashMap<>();
+		generationProperties.getSubreports().forEach((paramName, fileName) -> {
+			parameters.put(paramName, this.templatePath + FILE_PATH_SEPARATOR + fileName);
+		});
+		parameters.put("XML_DATA_DOCUMENT", data);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(template, parameters, dataSource);
 		return new SimpleExporterInput(jasperPrint);
 	}
 
@@ -129,7 +137,8 @@ public class ReportEngine {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	private JasperReport getTemplate(ReportGenerationProperties generationProperties) throws JRException, IOException {
-		String templateFilePath = this.templatePath + FILE_PATH_SEPARATOR + generationProperties.getTemplateFileName();
+		String templateFilePath = FILE_PATH_SEPARATOR + this.templatePath + FILE_PATH_SEPARATOR
+				+ generationProperties.getTemplateFileName();
 		log.debug("Template file path: " + templateFilePath);
 		try (InputStream templateStream = getClass().getResourceAsStream(templateFilePath)) {
 			return (JasperReport) JRLoader.loadObject(templateStream);
@@ -165,6 +174,7 @@ public class ReportEngine {
 		try {
 			SimplePdfReportConfiguration reportConfig = new SimplePdfReportConfiguration();
 			reportConfig.setSizePageToContent(false);
+			
 			reportConfig.setForceLineBreakPolicy(false);
 
 			SimplePdfExporterConfiguration exportConfig = new SimplePdfExporterConfiguration();
